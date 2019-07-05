@@ -1,3 +1,0 @@
-/store/mc/RunIISummer16MiniAODv2/Vector_MonoJ_NLO_Mphi-2000_Mchi-400_gSM-0p25_gDM-1p0_13TeV-madgraph/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/FEE42DF9-8CD5-E611-B1A2-6CC2173C3E80.root
-/store/mc/RunIISummer16MiniAODv2/Vector_MonoJ_NLO_Mphi-2000_Mchi-400_gSM-0p25_gDM-1p0_13TeV-madgraph/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/FA537B6D-79D5-E611-9CB2-0CC47A78A45A.root
-/store/mc/RunIISummer16MiniAODv2/Vector_MonoJ_NLO_Mphi-2000_Mchi-400_gSM-0p25_gDM-1p0_13TeV-madgraph/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/E2E1930D-69D5-E611-B2B2-FA163E039A43.root
