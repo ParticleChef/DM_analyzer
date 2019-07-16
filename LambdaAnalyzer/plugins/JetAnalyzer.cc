@@ -57,7 +57,7 @@ std::vector<pat::Jet> JetAnalyzer::FillJetVector(const edm::Event& iEvent) {
       pat::Jet jet=*it;
       //const reco::GenJet* genJet=jet.genJet();
       if (jet.pt()<30) continue;
-      if (abs(jet.eta())>2.5)continue;
+      //if (abs(jet.eta())>2.5)continue;
       Vect.push_back(jet); // Fill vector
     }
     return Vect;

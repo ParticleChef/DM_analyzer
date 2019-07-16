@@ -72,19 +72,34 @@ std::map<int, float> GenAnalyzer::LHEWeightsMap(const edm::Event& iEvent) {
 std::vector<reco::GenParticle> GenAnalyzer::FillGenVector(const edm::Event& iEvent) {
 
     std::vector<reco::GenParticle> Vect;
-
     iEvent.getByToken(GenParticlesToken, GenCollection);
     // Loop on Gen Particles collection
     for(std::vector<reco::GenParticle>::const_iterator it = GenCollection->begin(); it != GenCollection->end(); ++it) {
-//        std::cout << it->pdgId() << "  " << it->status() << "  " << it->pt() << "  " << it->eta() << "  " << it->phi() << "  " << it->mass() << std::endl;
-//        if(it->numberOfDaughters()>0) std::cout << "  " << it->daughter(0)->pdgId() << "  " << it->daughter(0)->status() << "  " << it->daughter(0)->pt() << std::endl;
-//        if(it->numberOfDaughters()>1) std::cout << "  " << it->daughter(1)->pdgId() << "  " << it->daughter(1)->status() << "  " << it->daughter(1)->pt() << std::endl;
+        //        std::cout << it->pdgId() << "  " << it->status() << "  " << it->pt() << "  " << it->eta() << "  " << it->phi() << "  " << it->mass() << std::endl;
+        //        if(it->numberOfDaughters()>0) std::cout << "  " << it->daughter(0)->pdgId() << "  " << it->daughter(0)->status() << "  " << it->daughter(0)->pt() << std::endl;
+        //        if(it->numberOfDaughters()>1) std::cout << "  " << it->daughter(1)->pdgId() << "  " << it->daughter(1)->status() << "  " << it->daughter(1)->pt() << std::endl;
+        //
+        reco::GenParticle genP = *it;
         for(unsigned int i = 0; i < ParticleList.size(); i++) {
-            if(abs(it->pdgId()) == ParticleList[i]) Vect.push_back(*it); // Fill vector
+            //if(abs(it->pdgId()) == ParticleList[i]) Vect.push_back(*it); // Fill vector
+            if(abs(it->pdgId()) == ParticleList[i]) Vect.push_back(genP); // Fill vector
         }
     }
-//    std::cout << "\n\n\n" << std::endl;
+    //    std::cout << "\n\n\n" << std::endl;
     return Vect;
+}
+
+std::vector<reco::GenParticle> GenAnalyzer::SelectGenVector(std::vector<reco::GenParticle>& Vect, int pdg) {
+
+    std::vector<reco::GenParticle> GenVector;
+    
+    //for(unsigned int i = 0; i < Vect.size(); i++) {
+    for(std::vector<reco::GenParticle>::const_iterator it = Vect.begin(); it != Vect.end(); ++it) {
+        //std::cout << Vect[i].pdgId() << std::endl;
+        if(abs(it->pdgId()) == pdg) GenVector.push_back(*it);
+    }
+
+    return GenVector;	
 }
 
 std::map<std::string, float> GenAnalyzer::FillLheMap(const edm::Event& iEvent) {

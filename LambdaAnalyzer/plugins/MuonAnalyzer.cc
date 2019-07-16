@@ -20,7 +20,7 @@ std::vector<pat::Muon> MuonAnalyzer::FillMuonVector(const edm::Event& iEvent) {
     // Loop on Muon collection
     for(std::vector<pat::Muon>::const_iterator it=MuonCollection->begin(); it!=MuonCollection->end(); ++it) {
         pat::Muon mu=*it;
-	if ( mu.pt()<5 || fabs(mu.eta())>2.4 || !mu.isLooseMuon() ) continue;
+	if ( mu.pt()<5 ||/* fabs(mu.eta())>2.4 ||*/ !mu.isLooseMuon() ) continue;
         Vect.push_back(mu);
     }
     return Vect;

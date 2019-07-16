@@ -40,6 +40,7 @@
 #include "TTree.h"
 #include "TH2.h"
 #include "TH1.h"
+#include "TLorentzVector.h"
 
 #include "GenAnalyzer.h"
 #include "JetAnalyzer.h"

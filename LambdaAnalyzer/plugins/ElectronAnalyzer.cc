@@ -32,7 +32,7 @@ std::vector<pat::Electron> ElectronAnalyzer::FillElectronVector(const edm::Event
     for(std::vector<pat::Electron>::const_iterator it=EleCollection->begin(); it!=EleCollection->end(); ++it) {
         pat::Electron el=*it;
         // Fill vector
-	if(el.pt()<15 || fabs(el.eta())>2.4) continue;
+	//if(el.pt()<15 || fabs(el.eta())>2.4) continue;
         Vect.push_back(el);
     }
     return Vect;

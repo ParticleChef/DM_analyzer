@@ -30,7 +30,8 @@ class GenAnalyzer {
         virtual std::map<std::string, float> FillLheMap(const edm::Event&);
         virtual std::vector<reco::GenParticle> FillGenVector(const edm::Event&);
         virtual reco::Candidate* FindGenParticle(std::vector<reco::GenParticle>&, int);
-	virtual std::vector<reco::Candidate*> FindGenParticleVector(std::vector<reco::GenParticle>&, int);
+		virtual std::vector<reco::GenParticle> SelectGenVector(std::vector<reco::GenParticle>&, int);
+		virtual std::vector<reco::Candidate*> FindGenParticleVector(std::vector<reco::GenParticle>&, int);
         virtual reco::Candidate* FindLastDaughter(reco::Candidate*);
         virtual reco::GenParticle* FindGenParticleGenByIds(std::vector<reco::GenParticle>&, std::vector<int>, int=-1);
         virtual reco::GenParticle* FindLastDaughterGen(reco::GenParticle*);
