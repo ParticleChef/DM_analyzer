@@ -94,7 +94,6 @@ LambdaAnalyzer::~LambdaAnalyzer(){
   
 }
 
-
 //
 // member functions
 //
@@ -137,8 +136,6 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    nJets=0; EventWeight=1.;
   
    Hist["a_nEvents"]->Fill(1.,EventWeight);
-   //std::cout << "Event filled" << std::endl;
-   //std::cout << std::endl;
 
    //GEN
    // Gen Weight
@@ -151,7 +148,7 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    std::vector<reco::GenParticle> GenPVect = theGenAnalyzer->FillGenVector(iEvent);
 
    for(unsigned int i = 0; i < GenPVect.size(); i++){
-       std::cout<<"Gen ID: "<<GenPVect[i].pdgId()<<std::endl;
+       //std::cout<<"Gen ID: "<<GenPVect[i].pdgId()<<std::endl;
    }
   
    //std::cout << GenPVect.size() << std::endl;
@@ -162,18 +159,11 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    // Gen candidates
    //reco::Candidate* theGenZ = theGenAnalyzer->FindGenParticle(GenPVect, 23);
    //reco::Candidate* theGenW = theGenAnalyzer->FindGenParticle(GenPVect, 24);
-   //reco::Candidate* theGenTop     = theGenAnalyzer->FindGenParticle(GenPVect, 6);
-   //reco::Candidate* theGenAntiTop = theGenAnalyzer->FindGenParticle(GenPVect, -6);
-
-   //reco::Candidate* theDM = theGenAnalyzer->FindGenParticle(GenPVect, 18);
-   //reco::Candidate* theZp = theGenAnalyzer->FindGenParticle(GenPVect, 55);
-   
-   //std::vector<reco::Candidate*> theDM = theGenAnalyzer->FindGenParticleVector(GenPVect, 18);
-   //std::vector<reco::Candidate*> theZp = theGenAnalyzer->FindGenParticleVector(GenPVect, 55);
    std::vector<reco::GenParticle> theDM = theGenAnalyzer->SelectGenVector(GenPVect, 18);
    std::vector<reco::GenParticle> theTop = theGenAnalyzer->SelectGenVector(GenPVect, 6);
    std::vector<reco::GenParticle> theEle = theGenAnalyzer->SelectGenVector(GenPVect, 11);
    std::vector<reco::GenParticle> theMu = theGenAnalyzer->SelectGenVector(GenPVect, 13);
+   std::vector<reco::GenParticle> theNeu;
 
    TLorentzVector vector1;
    TLorentzVector vector2;
@@ -192,6 +182,15 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
    sumVect = vector1 + vector2;
 
+   std::vector<int> NeuIds = {12,14,16};
+   for(std::vector<int>::const_iterator it = NeuIds.begin(); it != NeuIds.end(); ++it){
+       theNeu = theGenAnalyzer->SelectGenVector(GenPVect, *it);
+   }
+
+   for(unsigned int k = 0; k < theNeu.size(); k++){
+   Hist["r_dPhiNeuMed"]->Fill(deltaPhi(theNeu[k].phi(),sumVect.Phi()), EventWeight);
+   }
+
    Hist["g_Medmass"]->Fill(sumVect.M(),EventWeight);
    Hist["g_Medpt"]->Fill(sumVect.Pt(),EventWeight);
    Hist["g_Medeta"]->Fill(sumVect.Eta(),EventWeight);
@@ -203,6 +202,9 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
        Hist["g_TopEta"]->Fill(theTop[k].eta(),EventWeight);
        Hist["g_TopPhi"]->Fill(theTop[k].phi(),EventWeight);
    }
+       Hist["g_TopMeddPhi"]->Fill(deltaPhi(sumVect.Phi(),theTop[0].phi()), EventWeight);//deltaPhi(theTop[k].phi{},sumVect.Phi()));
+//       std::cout<<"topmed : "<<sumVect.Phi() - theTop.phi()<<std::endl;
+       std::cout<<"dddddd"<<std::endl;
 
    for(unsigned int k = 0; k < theEle.size(); k++) {
        Hist["g_Elemass"]->Fill(theEle[k].mass(),EventWeight);
@@ -252,9 +254,6 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    // Save MET phi
    METphi = MET.phi();
    METeta = MET.eta();
-   //std::cout << "MET filled" << std::endl;
-   //std::cout << std::endl;
-   
    // Fill number of events when MET > 200 GeV
    if ( MET.pt() > 160. ) Hist["a_nEvents"]->Fill(2.,EventWeight);
    if ( MET.pt() > 200. ) Hist["a_nEvents"]->Fill(3.,EventWeight);
@@ -313,7 +312,6 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    }
 
    //Filling
-   
    //GenJet
    Hist["g_nJet"]->Fill(JetsMCmatch.size(), EventWeight);
    for(unsigned int i = 0; i < JetsMCmatch.size(); i++){
@@ -333,12 +331,17 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    //std::cout << std::endl;
   
    nJets=JetsVect.size();
+
+
    //RecoJet
    Hist["r_nJet"]->Fill(nJets, EventWeight);
+   float SumJpt = 0;
    for(unsigned int i = 0; i < JetsVect.size(); i++){ 
      if (i>2) break;
+     SumJpt = SumJpt + JetsVect[i].pt();
      Hist[("r_Jet"+std::to_string(i+1)+"pt").c_str()]->Fill(JetsVect[i].pt(), EventWeight); 
      Hist[("r_Jet"+std::to_string(i+1)+"eta").c_str()]->Fill(JetsVect[i].eta(), EventWeight); 
+     Hist[("r_Jet"+std::to_string(i+1)+"phi").c_str()]->Fill(JetsVect[i].phi(), EventWeight); 
      RecoJphi = JetsVect[0].phi();
      RecoJeta = JetsVect[0].eta();
      if (JetsVect.size() >= 2 )
@@ -347,24 +350,32 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
          Hist["r_J1J2dEta"]->Fill(JetsVect[0].eta() - JetsVect[1].eta(), EventWeight);
          Hist["r_J1J2dR"]->Fill(deltaR(JetsVect[0].phi(), JetsVect[0].eta(), JetsVect[1].phi(), JetsVect[1].eta()), EventWeight);
      }
+     if( i+1 == JetsVect.size() ) Hist["r_HT"]->Fill(SumJpt, EventWeight);
    }
-   //std::cout << "Recojet finished" << std::endl;
-   //std::cout << std::endl;
+
+   std::cout<<"jetsvect.size "<<JetsVect.size()<<std::endl;
+   //Hist["r_HT"]->Fill(SumJpt, EventWeight);
+
+   std::cout << std::endl;
 
    for(unsigned int i = 0; i < ElecVect.size(); i++){
 	   Hist["r_Elept" ]->Fill(ElecVect[i].pt(), EventWeight);
 	   Hist["r_EleEta"]->Fill(ElecVect[i].eta(), EventWeight);
 	   Hist["r_ElePhi"]->Fill(ElecVect[i].phi(), EventWeight);
+       Hist["r_dPhiMETEle"]->Fill(deltaPhi(METphi, ElecVect[i].phi()), EventWeight);
+       Hist["r_dREleJet"]->Fill(deltaR(ElecVect[i].phi(), ElecVect[i].eta(), RecoJphi, RecoJeta));
    }
 
    for(unsigned int i = 0; i < MuonVect.size(); i++){
 	   Hist["r_Mupt" ]->Fill( MuonVect[i].pt(), EventWeight);
 	   Hist["r_MuEta"]->Fill(MuonVect[i].eta(), EventWeight);
 	   Hist["r_MuPhi"]->Fill(MuonVect[i].phi(), EventWeight);
+       Hist["r_dPhiMETMu"]->Fill(deltaPhi(METphi, MuonVect[i].phi()), EventWeight);
+       Hist["r_dRMuJet"]->Fill(deltaR(MuonVect[i].phi(), MuonVect[i].eta(), RecoJphi, RecoJeta));
    }
 
    // Calculate angle difference (delta phi) of MET and 
-   Hist["r_dPhi"]->Fill(deltaPhi(RecoJphi, METphi), EventWeight);
+   Hist["r_dPhiMETJet"]->Fill(deltaPhi(RecoJphi, METphi), EventWeight);
    Hist["r_dR"]->Fill(deltaR(METphi, METeta, RecoJphi, RecoJeta), EventWeight);
 
    tree->Fill();
