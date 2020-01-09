@@ -1,14 +1,14 @@
 import os
 import FWCore.ParameterSet.Config as cms
 import FWCore.Utilities.FileUtils as FileUtils
-mylist = FileUtils.loadListFromFile('monotop_2000_1500.txt')
+mylist = FileUtils.loadListFromFile('test.txt')
 
 process = cms.Process("lambda")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
-#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 process.option = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
@@ -23,7 +23,8 @@ process.source = cms.Source("PoolSource",
 process.lamb = cms.EDAnalyzer("LambdaAnalyzer",
                               genSet = cms.PSet(
                                                 genProduct = cms.InputTag('generator'),
-                                                lheProduct = cms.InputTag('externalLHEProducer'),
+                                                lheProduct = cms.InputTag('source'),
+                                                #lheProduct = cms.InputTag('externalLHEProducer'),
                                                 genParticles = cms.InputTag('prunedGenParticles'),
                                                 pdgId = cms.vint32(1, 2, 3, 4, 5, 6, 11, 12, 13, 14, 15, 16, 18, 21, 23, 24, 25, 55), #18 DM; 55 Med; 
                                                 ),
@@ -48,7 +49,7 @@ process.lamb = cms.EDAnalyzer("LambdaAnalyzer",
                               )
 
 process.TFileService = cms.Service("TFileService",
-                                    fileName = cms.string("Vector_Monotop_NLO_Mphi_2000_Mchi_1500.root"),#"results.root"),
+                                    fileName = cms.string("testVector_Monotop_NLO_rwt_Mphi_1995_Mchi_1000.root"),#"results.root"),
                                     closeFileFast = cms.untracked.bool(True)
                                     )
 

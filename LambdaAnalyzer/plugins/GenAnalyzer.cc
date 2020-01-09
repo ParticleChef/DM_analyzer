@@ -60,8 +60,10 @@ std::map<int, float> GenAnalyzer::LHEWeightsMap(const edm::Event& iEvent) {
      
     for(const auto & weight : lhe_product->weights()) {
         weights[std::stoi(weight.id)] = weight.wgt / original_w;
+        std::cout<<"weight.id = "<<weight.id<<", weight.wgt = "<<weight.wgt<<std::endl;
     }
 
+    std::cout<<"LHEweightmap"<<std::endl;
     return weights;
 }
 

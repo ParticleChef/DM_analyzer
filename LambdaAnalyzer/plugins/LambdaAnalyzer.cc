@@ -133,7 +133,12 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    using namespace edm;
  
    //Initialize event variable
-   nJets=0; EventWeight=1.;
+   nJets=0; 
+   std::map<int, float> weights = theGenAnalyzer->LHEWeightsMap(iEvent);
+   //EventWeight = weights[1];
+   std::cout<<"weights[] size "<<weights.size()<<std::endl;
+   std::cout<<"weights[23] = "<<weights[1000+23]<<std::endl;
+   EventWeight=1.;
   
    Hist["a_nEvents"]->Fill(1.,EventWeight);
 
@@ -147,8 +152,9 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    // Gen Particle
    std::vector<reco::GenParticle> GenPVect = theGenAnalyzer->FillGenVector(iEvent);
 
+   std::cout<<"GenPVect.size() = "<<GenPVect.size()<<std::endl;
    for(unsigned int i = 0; i < GenPVect.size(); i++){
-       //std::cout<<"Gen ID: "<<GenPVect[i].pdgId()<<std::endl;
+//     std::cout<<"Gen ID: "<<GenPVect[i].pdgId()<<std::endl;
    }
   
    //std::cout << GenPVect.size() << std::endl;
@@ -173,6 +179,10 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    for(unsigned int k = 0; k < theDM.size(); k++) {
        if( k == 0 ) vector1.SetPtEtaPhiM(theDM[k].pt(), theDM[k].eta(), theDM[k].phi(), theDM[k].mass());
        if( k == 1 ) vector2.SetPtEtaPhiM(theDM[k].pt(), theDM[k].eta(), theDM[k].phi(), theDM[k].mass());
+//       Hist["g_DMmass"]->Fill(theDM[k].mass(),EventWeight);
+//       Hist["g_DMpt"]->Fill(theDM[k].pt(),EventWeight);
+//       Hist["g_DMeta"]->Fill(theDM[k].eta(),EventWeight);
+//       Hist["g_DMphi"]->Fill(theDM[k].phi(),EventWeight);
        Hist["g_DMmass"]->Fill(theDM[k].mass(),EventWeight);
        Hist["g_DMpt"]->Fill(theDM[k].pt(),EventWeight);
        Hist["g_DMeta"]->Fill(theDM[k].eta(),EventWeight);
