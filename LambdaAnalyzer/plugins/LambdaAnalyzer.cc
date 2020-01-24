@@ -136,9 +136,9 @@ LambdaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    nJets=0; 
    std::map<int, float> weights = theGenAnalyzer->LHEWeightsMap(iEvent);
    //EventWeight = weights[1];
-   std::cout<<"weights[] size "<<weights.size()<<std::endl;
-   std::cout<<"weights[23] = "<<weights[1000+23]<<std::endl;
-   EventWeight=1.;
+   //std::cout<<"weights[] size "<<weights.size()<<std::endl;
+   //std::cout<<"weights[23] = "<<weights[1000+23]<<std::endl;
+   EventWeight=weights[1000+23];;
   
    Hist["a_nEvents"]->Fill(1.,EventWeight);
 
